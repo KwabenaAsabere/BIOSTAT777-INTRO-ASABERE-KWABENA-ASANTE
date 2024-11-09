@@ -12,6 +12,8 @@ date: "11-08-2024"
 bibliography: references.bib
 ---
 
+![](images/myocardial infarction-02.webp){width="568"}
+
 ### **Analysis Question:**
 
 The analysis aims to answer the question: *“How do specific risk factors, such as age, cholesterol levels, smoking status, and blood pressure, influence the likelihood of myocardial infarction (MI) among white males aged 15 to 64 in high-incidence rural areas of the Western Cape, South Africa?”* [@steyn1997twelve]This logistic regression analysis will quantify and evaluate the strength of association between these risk factors and the presence of MI, helping to shed light on their contributions to cardiovascular health outcomes.[@rossouw1993intervention]
@@ -43,7 +45,7 @@ The data analyzed in this project is derived from the **Coronary Risk-Factor Stu
 Below is a data dictionary describing key variables used in the analysis:
 
 | **Variable** | **Description** | **Type** | **Values/Units** |
-|----|----|----|----|
+|------------------|------------------|------------------|------------------|
 | **MI (Myocardial Infarction)** | Outcome variable indicating presence or absence of MI | Binary (0/1) | 0 = No MI, 1 = MI |
 | **Age** | Age of participant (years) | Continuous | 15-64 years |
 | **Cholesterol** | Total cholesterol level (mg/dL) | Continuous | Measured in mg/dL |
@@ -208,7 +210,7 @@ The model demonstrated good discriminative ability, with an area under the ROC c
 The significant associations of age, LDL cholesterol, and family history with myocardial infarction highlight key risk factors requiring intervention, while the lack of significance for blood pressure categories and smoking status suggests potential complexities in their impact or limitations in sample representation.\
 :::
 
-### list of packages and functions used 
+### list of packages and functions used
 
 1.  dplyr a)mutate b)case when
 
