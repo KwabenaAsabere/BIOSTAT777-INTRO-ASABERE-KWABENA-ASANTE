@@ -1,0 +1,18 @@
+update.packages("knitr")
+update.packages("evaluate")
+
+
+
+install.packages("knitr")
+install.packages("evaluate")
+write.csv(sa_heart, "sa_heart.csv", row.names = FALSE)
+
+glimpse(sa_heart
+        )
+The Coronary Risk-Factor Study (CORIS) was a comprehensive 
+baseline survey that assessed cardiovascular risk factors in 
+three rural communities in the Western Cape, South Africa [@rossouw1983coris]. 
+Subsequent studies have highlighted community-based interventions and their
+effectiveness in reducing risk factors over time [@rossouw1993intervention]. 
+Long-term results of CORIS demonstrate sustained benefits and provide valuable 
+insights for public health strategies [@steyn1997twelve].

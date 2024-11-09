@@ -1,11 +1,9 @@
 ---
 title: "ASABERE KWABENA ASANTE"
+editor_options: 
+  chunk_output_type: console
 ---
 
-This is a Quarto website.
+![](images/JHU Alumni Meeting 11.23 Smaller for LinkedIn-281.jpg)
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
-```
+Transforming Health Data into Lifesaving Insights: Empowering Innovation in Healthcare through Data Science. Harnessing the Power of Analytics to Improve Patient Outcomes and Drive Medical Breakthroughs. Join Me in Making Data Work for Healthier Lives.

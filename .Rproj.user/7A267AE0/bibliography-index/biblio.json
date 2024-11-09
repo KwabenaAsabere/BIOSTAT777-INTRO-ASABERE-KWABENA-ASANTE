@@ -1,0 +1,155 @@
+{
+    "sources": [
+        {
+            "URL": "https://europepmc.org/article/MED/6623218",
+            "author": [
+                {
+                    "family": "Rossouw",
+                    "given": "JE"
+                },
+                {
+                    "family": "Du Plessis",
+                    "given": "JP"
+                },
+                {
+                    "family": "Benadé",
+                    "given": "AJ"
+                },
+                {
+                    "family": "Jordaan",
+                    "given": "PC"
+                },
+                {
+                    "family": "Kotzé",
+                    "given": "JP"
+                },
+                {
+                    "family": "Jooste",
+                    "given": "PL"
+                },
+                {
+                    "family": "Ferreira",
+                    "given": "JJ"
+                }
+            ],
+            "container-title": "South African Medical Journal",
+            "id": "rossouw1983coris",
+            "issue": "12",
+            "issued": {
+                "date-parts": [
+                    [
+                        1983
+                    ]
+                ]
+            },
+            "page": "430-436",
+            "title": "Coronary risk factor screening in three rural communities. The CORIS baseline study.",
+            "type": "article-journal",
+            "volume": "64"
+        },
+        {
+            "URL": "https://academic.oup.com/ije/article/22/3/428/674633",
+            "author": [
+                {
+                    "family": "Rossouw",
+                    "given": "JE"
+                },
+                {
+                    "family": "Jooste",
+                    "given": "PL"
+                },
+                {
+                    "family": "Chalton",
+                    "given": "DO"
+                },
+                {
+                    "family": "Jordaan",
+                    "given": "EA"
+                },
+                {
+                    "family": "Langenhoven",
+                    "given": "ML"
+                },
+                {
+                    "family": "Jordaan",
+                    "given": "PC"
+                },
+                {
+                    "family": "Steyn",
+                    "given": "M"
+                },
+                {
+                    "family": "Swanepoel",
+                    "given": "AS"
+                },
+                {
+                    "family": "Rossouw",
+                    "given": "LJ"
+                }
+            ],
+            "container-title": "International Journal of Epidemiology",
+            "id": "rossouw1993intervention",
+            "issue": "3",
+            "issued": {
+                "date-parts": [
+                    [
+                        1993
+                    ]
+                ]
+            },
+            "page": "428-438",
+            "title": "Community-based intervention: The coronary risk factor study (CORIS)",
+            "title-short": "Community-based intervention",
+            "type": "article-journal",
+            "volume": "22"
+        },
+        {
+            "URL": "https://academic.oup.com/ije/article/26/5/964/722477",
+            "author": [
+                {
+                    "family": "Steyn",
+                    "given": "K"
+                },
+                {
+                    "family": "Steyn",
+                    "given": "M"
+                },
+                {
+                    "family": "Swanepoel",
+                    "given": "AS"
+                },
+                {
+                    "family": "Jordaan",
+                    "given": "PC"
+                },
+                {
+                    "family": "Jooste",
+                    "given": "PL"
+                },
+                {
+                    "family": "Fourie",
+                    "given": "JM"
+                },
+                {
+                    "family": "Rossouw",
+                    "given": "JE"
+                }
+            ],
+            "container-title": "International Journal of Epidemiology",
+            "id": "steyn1997twelve",
+            "issue": "5",
+            "issued": {
+                "date-parts": [
+                    [
+                        1997
+                    ]
+                ]
+            },
+            "page": "964-971",
+            "title": "Twelve-year results of the coronary risk factor study (CORIS)",
+            "type": "article-journal",
+            "volume": "26"
+        }
+    ],
+    "project_biblios": []
+}

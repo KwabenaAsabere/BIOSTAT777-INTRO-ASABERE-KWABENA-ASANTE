@@ -1,0 +1,217 @@
+---
+title: "EXAMPLE DATA ANALYSIS"
+df-print: kable
+execute: 
+  echo: true
+  warning: false
+  message: false
+editor_options: 
+  chunk_output_type: console
+author: "Asabere Kwabena Asante"
+date: "11-08-2024"
+bibliography: references.bib
+---
+
+### **Analysis Question:**
+
+The analysis aims to answer the question: *“How do specific risk factors, such as age, cholesterol levels, smoking status, and blood pressure, influence the likelihood of myocardial infarction (MI) among white males aged 15 to 64 in high-incidence rural areas of the Western Cape, South Africa?”* [@steyn1997twelve]This logistic regression analysis will quantify and evaluate the strength of association between these risk factors and the presence of MI, helping to shed light on their contributions to cardiovascular health outcomes.[@rossouw1993intervention]
+
+::: callout-warning
+## Study Population
+
+The study population lacks diversity as it involves only white men.No women or people of colour were included in the study so the results of this analysis may not be generisable.
+:::
+
+### **Intended Audience:**
+
+The intended audience for this data analysis includes:
+
+-   **Healthcare professionals** seeking to understand and address cardiovascular disease risk factors in rural populations.
+
+-   **Public health policymakers** focused on designing targeted interventions for high-risk communities.
+
+-   **Medical researchers** interested in the statistical relationships between cardiovascular risk factors and disease outcomes.
+
+-   **Students and educators** in the fields of public health, epidemiology, and data science who can use this analysis as a case study for practical applications of logistic regression.
+
+### **Source of Data:**
+
+The data analyzed in this project is derived from the **Coronary Risk-Factor Study (CORIS)**,[@rossouw1983coris] a baseline survey conducted in three rural areas of the Western Cape, South Africa, as reported by Rousseauw et al. (1983). This study specifically assessed risk factors for ischemic heart disease among white males aged 15 to 64. The study article can be found [here](https://academic.oup.com/ije/article/22/3/428/674633).[@rossouw1983coris]
+
+### **Data Dictionary:**
+
+Below is a data dictionary describing key variables used in the analysis:
+
+| **Variable** | **Description** | **Type** | **Values/Units** |
+|----|----|----|----|
+| **MI (Myocardial Infarction)** | Outcome variable indicating presence or absence of MI | Binary (0/1) | 0 = No MI, 1 = MI |
+| **Age** | Age of participant (years) | Continuous | 15-64 years |
+| **Cholesterol** | Total cholesterol level (mg/dL) | Continuous | Measured in mg/dL |
+| **Smoking Status** | Indicates whether the participant is a smoker | Binary (0/1) | 0 = Non-smoker, 1 = Smoker |
+| **Blood Pressure** | Systolic and/or diastolic blood pressure (mmHg) | Continuous | Measured in mmHg |
+| **BMI (Body Mass Index)** | Body mass index (weight in kg/height in m²) | Continuous | Calculated value |
+
+```{r}
+library(tidyverse)
+library(broom)
+library(finalfit)
+library(gtsummary)
+theme_set(theme_bw())
+```
+
+```{r}
+sa_heart <- read_csv("SAHeart.csv")
+
+sa_heart %>% head(10)
+
+missing_glimpse(sa_heart)
+```
+
+```{r}
+# creating  new columns to categorize the BMI values and systolic blood pressure values
+
+
+sa_heart <- sa_heart %>%
+  mutate(
+    bp_category = case_when(
+      sbp < 120 ~ "Normal",
+      sbp >= 120 & sbp < 130 ~ "Elevated",
+      sbp >= 130 & sbp < 140 ~ "Hypertension Stage 1",
+      sbp >= 140 & sbp < 180 ~ "Hypertension Stage 2",
+      sbp >= 180 ~ "Hypertensive Crisis",
+      TRUE ~ NA_character_  # Handles unexpected or missing values
+    ),
+    bmi_category = case_when(
+      obesity < 18.5 ~ "Underweight",
+      obesity >= 18.5 & obesity < 24.9 ~ "Normal weight",
+      obesity >= 25 & obesity < 29.9 ~ "Overweight",
+      obesity >= 30 & obesity < 34.9 ~ "Obesity Class 1 (Mild obesity)",
+      obesity >= 35 & obesity < 39.9 ~ "Obesity Class 2 (Moderate obesity)",
+      obesity >= 40 ~ "Obesity Class 3 (Severe obesity)",
+      TRUE ~ NA_character_  # Handles unexpected or missing values
+    ),
+    row.names = NULL
+  ) %>% 
+  mutate(bp_category = as_factor(bp_category),
+         bmi_category = as_factor(bmi_category),
+         famhist = as_factor(famhist)) %>% 
+  mutate(bp_category = fct_relevel(bp_category,"Normal"),
+         famhist = fct_relevel(famhist,"Absent")) %>% 
+  relocate(c("bp_category","bmi_category"),.before = chd)
+
+sa_heart %>% head(10)
+glimpse(sa_heart)
+
+```
+
+```{r}
+#| label: Boxplot
+#| fig-cap: "Boxplot of Systolic Blood Pressure by BMI Category"
+
+sa_heart %>% na.omit() %>% 
+  ggplot(aes(x = bp_category, y= sbp))+
+  geom_boxplot()+
+  labs(x = "Hypertension Stage",
+       y = "Systolic Blood Pressure",
+       title =" Boxplot of Systolic Bloood Pressure vs AHA Hypertension Stage")
+
+
+```
+
+```{r}
+#| label: Histogram
+#| fig-cap: "Histogram of LDL Cholestrol levels"
+
+sa_heart %>% na.omit() %>% 
+  ggplot(aes(x = ldl))+
+  geom_histogram( fill = "steelblue",color = "black",bins = 20)+
+  facet_wrap(~chd)+
+  labs(
+    x = "LDL Cholesterol (mg/dl)",
+    y = "Frequency",
+    title = "Distribution of LDL Cholesterol Levels According to CHD Status"
+  )
+  
+
+```
+
+```{r}
+#| label: Scatterplot
+#| fig-cap: "Scatterplot of LDL cholesterol level vs Adiposity"
+
+sa_heart %>% 
+  ggplot(aes(x = adiposity, y = ldl))+
+  geom_point()+
+  geom_smooth(se = FALSE,color = "red")+
+  labs(x = "Adiposity",
+       y = "LDL Cholestrol (mg/dl)",
+       title ="Scatterplot of LDL cholesterol Level vs Adiposity" )
+
+```
+
+### Fitting a Logistic Regression Model
+
+```{r}
+chd_model <- glm(chd ~ age + ldl + famhist + bp_category + tobacco + alcohol, 
+                data = sa_heart, 
+                family = binomial(link = "logit"))
+
+
+
+```
+
+### Summary of Model Output
+
+```{r}
+#| label: Logistic Regression Output
+#| tbl-cap: "Table of Log Odds Ratios"
+tidy_chd_model <- broom::tidy(chd_model)
+tidy_chd_model
+```
+
+```{r}
+#| label: Odds Ratios and Confidence Intervals
+#| tbl-cap: "Odds Ratios and Confidence Intervals"
+
+
+#tidy_chd_model2 <- tidy(chd_model, conf.int = TRUE, exponentiate = TRUE)
+#tidy_chd_model2
+
+chd_model%>% 
+  tbl_regression(exponentiate = TRUE)
+```
+
+```{r}
+sa_heart <- sa_heart %>%
+  mutate(predicted_prob = predict(chd_model, type = "response"))
+
+
+library(pROC)
+roc_curve <- roc(sa_heart$chd, sa_heart$predicted_prob)
+plot(roc_curve)
+auc(roc_curve)
+```
+
+::: callout-note
+## AUC
+
+The area under the curve (AUC) measures the ability of a model to discriminate between classes in a binary classification problem, with values closer to 1 indicating better predictive accuracy and validity.
+:::
+
+### Discussion of Results
+
+This logistic regression analysis investigated the relationship between age, cholesterol levels (LDL), family history of heart disease, smoking status, and blood pressure categories with the likelihood of myocardial infarction (MI) among white males aged 15 to 64 in high-incidence rural areas of the Western Cape, South Africa. Age (OR = 1.04, 95% CI: 1.02-1.07, p \< 0.001) and LDL cholesterol (OR = 1.19, 95% CI: 1.07-1.33, p = 0.002) were found to be significant predictors, indicating that an increase in these factors was associated with a higher likelihood of MI. A positive family history of heart disease was also a strong predictor (OR = 2.64, 95% CI: 1.69-4.13, p \< 0.001). Blood pressure categories and smoking status did not show statistically significant associations.
+
+The model demonstrated good discriminative ability, with an area under the ROC curve (AUC) of 0.7889. These findings underscore the importance of modifiable cardiovascular risk factors such as cholesterol management and the relevance of family history in predicting MI risk, emphasizing the need for targeted preventive strategies in this population.
+
+::: column-margin
+The significant associations of age, LDL cholesterol, and family history with myocardial infarction highlight key risk factors requiring intervention, while the lack of significance for blood pressure categories and smoking status suggests potential complexities in their impact or limitations in sample representation.\
+:::
+
+### list of packages and functions used 
+
+1.  dplyr a)mutate b)case when
+
+2.  ggplot a)geom_point b)geom_histogram c)geom_scatterplot d)facet-wrap
+
+3.  tidyr 1) rename , relocate,
